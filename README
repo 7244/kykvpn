@@ -1,0 +1,12 @@
+kykvpn
+
+vpn that bypasses kyk's wall
+
+opens socks5 server and a dns server to defined ports
+
+dns query through socks5 is not supported yet
+udp through socks5 is not supported yet
+
+language: gnuc99
+
+does not work in windows because of EV problems from libuv backend
