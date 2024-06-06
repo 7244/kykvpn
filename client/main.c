@@ -25,9 +25,7 @@
 #define BLL_set_NodeData \
   uint8_t Data[0x200];
 #define BLL_set_Language 0
-/* TODO use witch constant */
-#define BLL_set_UseUninitialisedValues 0
-#include <WITCH/BLL/BLL.h>
+#include <BLL/BLL.h>
 
 typedef struct{
   NET_TCP_peer_t *peer;
