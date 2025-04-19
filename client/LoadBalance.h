@@ -107,7 +107,7 @@ if(WriteCount == 0){
         PR_abort();
       }
 
-      MEM_copy(tp, &Data[DataIndex], GotSize);
+      __builtin_memcpy(&Data[DataIndex], tp, GotSize);
       DataIndex += GotSize;
     }
 

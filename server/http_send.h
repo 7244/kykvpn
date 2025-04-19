@@ -9,7 +9,7 @@ void PackSendBuffer(){
   icack_t icack = pile.ic.srcack_to++;
 
   uint8_t *Data = A_resize(NULL, Size);
-  MEM_copy(pile.SendBuffer.ptr, Data, Size);
+  __builtin_memcpy(Data, pile.SendBuffer.ptr, Size);
   pile.SendBuffer.Current = 0;
 
   ic_Packet_t icp;
@@ -38,7 +38,7 @@ void tcp_http_send_SendACK(tcp_http_send_pd_t *pd, bool Force){
     icack = pile.ic.srcack_to++;
 
     uint8_t *Data = A_resize(NULL, Size);
-    MEM_copy(pile.SendBuffer.ptr, Data, Size);
+    __builtin_memcpy(Data, pile.SendBuffer.ptr, Size);
     pile.SendBuffer.Current = 0;
 
     icp = &_icp;

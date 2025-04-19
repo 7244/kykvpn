@@ -31,12 +31,12 @@ void tcp_da_PushConnectedData(SessionMap_Output_t *o, void *Data, uintptr_t Data
     uintptr_t Left = DataSize - DataIndex;
     if(Left > LastLeftSize){
       Left = LastLeftSize;
-      MEM_copy(&((uint8_t *)Data)[DataIndex], &ln->data.Data[m], Left);
+      __builtin_memcpy(&ln->data.Data[m], &((uint8_t *)Data)[DataIndex], Left);
       DataIndex += Left;
       o->TotalSize += Left;
     }
     else{
-      MEM_copy(&((uint8_t *)Data)[DataIndex], &ln->data.Data[m], Left);
+      __builtin_memcpy(&ln->data.Data[m], &((uint8_t *)Data)[DataIndex], Left);
       o->TotalSize += Left;
       return;
     }
@@ -50,12 +50,12 @@ void tcp_da_PushConnectedData(SessionMap_Output_t *o, void *Data, uintptr_t Data
     uintptr_t Left = DataSize - DataIndex;
     if(Left > sizeof(ln->data.Data)){
       Left = sizeof(ln->data.Data);
-      MEM_copy(&((uint8_t *)Data)[DataIndex], ln->data.Data, Left);
+      __builtin_memcpy(ln->data.Data, &((uint8_t *)Data)[DataIndex], Left);
       DataIndex += Left;
       o->TotalSize += Left;
     }
     else{
-      MEM_copy(&((uint8_t *)Data)[DataIndex], ln->data.Data, Left);
+      __builtin_memcpy(ln->data.Data, &((uint8_t *)Data)[DataIndex], Left);
       o->TotalSize += Left;
       return;
     }

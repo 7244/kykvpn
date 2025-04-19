@@ -27,7 +27,7 @@ void tcp_http_send_Timer(EV_t *l, EV_timer_t *t){
     icack = pile.ic.srcack_to++;
 
     uint8_t *Data = A_resize(NULL, Size);
-    MEM_copy(pile.SendBuffer.ptr, Data, Size);
+    __builtin_memcpy(Data, pile.SendBuffer.ptr, Size);
     pile.SendBuffer.Current = 0;
 
     icp = &_icp;

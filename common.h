@@ -85,7 +85,7 @@ void print(const char *format, ...){
 
 void common_LowerSocketBuffer(NET_socket_t s){
   sint32_t BufferSize;
-  sint32_t r = NET_getsockopt(&s, SOL_SOCKET, SO_SNDBUF, &BufferSize);
+  sint32_t r = NET_getsockopt(&s, NET_SOL_SOCKET, NET_SO_SNDBUF, &BufferSize);
   if(r){
     vprint("common socket BufferSize NET_getsockopt failed %ld\n", r);
     return;
@@ -101,7 +101,7 @@ void common_LowerSocketBuffer(NET_socket_t s){
 
   /* we set first setsockopt same as first to cancel kernel's autotune */
   BufferSize /= 2;
-  r = NET_setsockopt(&s, SOL_SOCKET, SO_SNDBUF, BufferSize);
+  r = NET_setsockopt(&s, NET_SOL_SOCKET, NET_SO_SNDBUF, BufferSize);
   if(r){
     vprint("common socket canceling autotune buffer failed %ld\n", r);
     return;
@@ -115,7 +115,7 @@ void common_LowerSocketBuffer(NET_socket_t s){
   }
 
   while(BufferSize >= 0x400){
-    r = NET_setsockopt(&s, SOL_SOCKET, SO_SNDBUF, BufferSize);
+    r = NET_setsockopt(&s, NET_SOL_SOCKET, NET_SO_SNDBUF, BufferSize);
     if(r){
       break;
     }
@@ -163,8 +163,8 @@ tcppile_Open(
 
 NET_TCP_peer_t *tcp_connect(NET_TCP_t *tcp, NET_addr_t *addr){
   NET_TCP_sockopt_t sockopt;
-  sockopt.level = IPPROTO_TCP;
-  sockopt.optname = TCP_NODELAY;
+  sockopt.level = NET_IPPROTO_TCP;
+  sockopt.optname = NET_TCP_NODELAY;
   sockopt.value = 1;
 
   NET_TCP_peer_t *FillerPeer;
@@ -204,7 +204,7 @@ void tcp_write_s2sp(NET_TCP_peer_t *peer, const void *Data, uintptr_t Size, NET_
     )
   );
   uint8_t *sp = resize(0, Size);
-  MEM_copy(Data, sp, Size);
+  __builtin_memcpy(sp, Data, Size);
 
   NET_TCP_Queue_t Queue;
   Queue.SpecialPointer.ptr = sp;
@@ -220,7 +220,7 @@ void tcp_write_s2sp(NET_TCP_peer_t *peer, const void *Data, uintptr_t Size, NET_
     if(ls > ((size) - pd->CopyIndex)){ \
       ls = ((size) - pd->CopyIndex); \
     } \
-    MEM_copy(&Data[DataIndex], &((uint8_t *)(to))[pd->CopyIndex], ls); \
+    __builtin_memcpy(&((uint8_t *)(to))[pd->CopyIndex], &Data[DataIndex], ls); \
     DataIndex += ls; \
     pd->CopyIndex += ls; \
     bool r = pd->CopyIndex == size; \

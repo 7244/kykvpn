@@ -23,6 +23,7 @@
 #define BLL_set_prefix tcp_da_PacketList
 #define BLL_set_NodeData \
   uint8_t Data[0x200];
+#define BLL_set_Usage 1
 #define BLL_set_Language 0
 #include <BLL/BLL.h>
 
@@ -176,7 +177,7 @@ void net_httpp_Write(SessionID_t SessionID, const void *Data, uintptr_t DataSize
       left = set_http_send_MaxSize - pile.SendBuffer.Current - pbs;
     }
     Head->DataSize = left;
-    MEM_copy(&((uint8_t *)Data)[DataIndex], &Head[1], left);
+    __builtin_memcpy(&Head[1], &((uint8_t *)Data)[DataIndex], left);
     VEC_print(&pile.SendBuffer, "%.*s", pbs + left, Payload);
     DataIndex += left;
   }
@@ -222,7 +223,7 @@ void net_httpp_DNS(httpp_DNSID_t DNSID, const void *Data, uintptr_t DataSize){
   h->DNSID = DNSID;
   h->Size = DataSize;
 
-  MEM_copy(Data, &h[1], DataSize);
+  __builtin_memcpy(&h[1], Data, DataSize);
 
   VEC_print(&pile.SendBuffer, "%.*s", sizeof(Payload), Payload);
 }
@@ -300,7 +301,7 @@ int main(){
   {
     pile.DNSTransactionID = 0;
 
-    sint32_t err = NET_socket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, IPPROTO_UDP, &pile.DNSSocket);
+    sint32_t err = NET_socket2(NET_AF_INET, NET_SOCK_DGRAM | NET_SOCK_NONBLOCK, NET_IPPROTO_UDP, &pile.DNSSocket);
     if(err != 0){
       PR_abort();
     }

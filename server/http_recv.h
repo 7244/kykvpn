@@ -210,7 +210,7 @@ sint32_t ProcessHTTPP(tcp_http_recv_pd_t *pd, const uint8_t *Data, uintptr_t Dat
 
         uint8_t UDPData[0x800];
         *(uint16_t *)&UDPData[0] = dnso->TransactionID;
-        MEM_copy(pd->d.DNS_Data, &UDPData[2], pd->d.DNS_Head.Size);
+        __builtin_memcpy(&UDPData[2], pd->d.DNS_Data, pd->d.DNS_Head.Size);
         NET_addr_t dstaddr;
         dstaddr.ip = set_DNS_ServerIP;
         dstaddr.port = set_DNS_ServerPort;

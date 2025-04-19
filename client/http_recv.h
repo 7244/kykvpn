@@ -249,7 +249,7 @@ sint32_t ProcessHTTPP(const uint8_t *Data, uintptr_t DataSize){
 
         uint8_t UDPData[0x800];
         *(uint16_t *)&UDPData[0] = dnso->TransactionID;
-        MEM_copy(pd->d.DNS_Data, &UDPData[2], pd->d.DNS_Head.Size);
+        __builtin_memcpy(&UDPData[2], pd->d.DNS_Data, pd->d.DNS_Head.Size);
         NET_sendto(&pile.DNSSocket, UDPData, pd->d.DNS_Head.Size + 2, &dnso->RecvAddress);
 
         RemoveDNSQuery(pd->d.DNS_Head.DNSID);
