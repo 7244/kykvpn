@@ -166,15 +166,15 @@ cb_tcp_http_read(
           const char *r0 = "POST";
           const char *r1 = "/uploadpfp";
           if(
-            (MEM_cstreu(s0) == result.head.s[0] && STR_ncmp(s0, result.head.v[0], result.head.s[0]) == 0) &&
-            (result.head.s[1] > MEM_cstreu(s1) && STR_ncmp(s1, result.head.v[1], MEM_cstreu(s1)) == 0)
+            (MEM_cstrlen(s0) == result.head.s[0] && STR_ncmp(s0, result.head.v[0], result.head.s[0]) == 0) &&
+            (result.head.s[1] > MEM_cstrlen(s1) && STR_ncmp(s1, result.head.v[1], MEM_cstrlen(s1)) == 0)
           ){
             pd->HeadState = http_head_state_send;
-            pd->ack = STR_psh32_digit(&result.head.v[1][MEM_cstreu(s1)], result.head.s[1] - MEM_cstreu(s1));
+            pd->ack = STR_psh32_digit(&result.head.v[1][MEM_cstrlen(s1)], result.head.s[1] - MEM_cstrlen(s1));
           }
           else if(
-            (MEM_cstreu(r0) == result.head.s[0] && STR_ncmp(r0, result.head.v[0], result.head.s[0]) == 0) &&
-            (MEM_cstreu(r1) == result.head.s[1] && STR_ncmp(r1, result.head.v[1], result.head.s[1]) == 0)
+            (MEM_cstrlen(r0) == result.head.s[0] && STR_ncmp(r0, result.head.v[0], result.head.s[0]) == 0) &&
+            (MEM_cstrlen(r1) == result.head.s[1] && STR_ncmp(r1, result.head.v[1], result.head.s[1]) == 0)
           ){
             pd->HeadState = http_head_state_recv;
           }
@@ -182,7 +182,7 @@ cb_tcp_http_read(
         else if(ret == HTTP_ResultType_header_e){
           const char *cl_str = "Content-Length";
           if(
-            MEM_cstreu(cl_str) == result.header.s[0] &&
+            MEM_cstrlen(cl_str) == result.header.s[0] &&
             STR_ncmp(cl_str, result.header.v[0], result.header.s[0]) == 0
           ){
             pd->ContentLength = STR_psu64(result.header.v[1], result.header.s[1]);
@@ -270,7 +270,7 @@ cb_tcp_http_read(
           "X-Powered-By: PleskLin\r\n"
           "MS-Author-Via: DAV\r\n"
           "Connection: Keep-Alive\r\n\r\n";
-        tcp_write_dp(peer, StackData, MEM_cstreu(StackData));
+        tcp_write_dp(peer, StackData, MEM_cstrlen(StackData));
 
         tcp_http_PeerReinit(peer);
       }

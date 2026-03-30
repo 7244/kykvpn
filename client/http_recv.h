@@ -307,10 +307,10 @@ cb_tcp_http_recv_read(
         if(ret == HTTP_ResultType_head_e){
           const char *r1 = "200";
           const char *r2 = "OK";
-          if(MEM_cstreu(r1) == result.head.s[1] && STR_ncmp(r1, result.head.v[1], result.head.s[1]) == 0){
+          if(MEM_cstrlen(r1) == result.head.s[1] && STR_ncmp(r1, result.head.v[1], result.head.s[1]) == 0){
             pd->hd_combo++;
           }
-          if(MEM_cstreu(r2) == result.head.s[2] && STR_ncmp(r2, result.head.v[2], result.head.s[2]) == 0){
+          if(MEM_cstrlen(r2) == result.head.s[2] && STR_ncmp(r2, result.head.v[2], result.head.s[2]) == 0){
             pd->hd_combo++;
           }
         }
@@ -318,12 +318,12 @@ cb_tcp_http_recv_read(
           const char *r00 = "Content-Length";
           const char *r10 = "Connection";
           const char *r11 = "Keep-Alive";
-          if(MEM_cstreu(r00) == result.header.s[0] && STR_ncmp(r00, result.header.v[0], result.header.s[0]) == 0){
+          if(MEM_cstrlen(r00) == result.header.s[0] && STR_ncmp(r00, result.header.v[0], result.header.s[0]) == 0){
             pd->ContentLength = STR_psu64(result.header.v[1], result.header.s[1]);
             pd->hd_combo++;
           }
-          else if(MEM_cstreu(r10) == result.header.s[0] && STR_ncmp(r10, result.header.v[0], result.header.s[0]) == 0){
-            if(MEM_cstreu(r11) == result.header.s[1] && STR_ncasecmp(r11, result.header.v[1], result.header.s[1]) == 0){
+          else if(MEM_cstrlen(r10) == result.header.s[0] && STR_ncmp(r10, result.header.v[0], result.header.s[0]) == 0){
+            if(MEM_cstrlen(r11) == result.header.s[1] && STR_ncasecmp(r11, result.header.v[1], result.header.s[1]) == 0){
               pd->hd_combo++;
             }
           }
